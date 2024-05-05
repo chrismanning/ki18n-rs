@@ -52,7 +52,8 @@ fn qt_setup(config: &mut cpp_build::Config) -> Version {
 fn ki18n_setup(config: &mut cpp_build::Config) {
     const LIB_NAME: &str = "I18n";
 
-    config.include(kde_frameworks::get_lib_include_path(LIB_NAME).unwrap());
+    let (version, include_path, _lib_path) = kde_frameworks::check_env_variables("KF").expect("KF_* variables must be set");
+    config.include(kde_frameworks::get_lib_include_path(LIB_NAME, version.major, &include_path).unwrap());
 
-    kde_frameworks::link_lib(LIB_NAME).unwrap();
+    kde_frameworks::link_lib(LIB_NAME, version.major).unwrap();
 }
